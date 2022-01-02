@@ -16,7 +16,7 @@ mongoose.connection.on('connected',()=>{
 mongoose.connection.on('error',(err)=>{
     console.log("error faced while connecting to mongo: ", err);
 })
-//app.use(customMiddleware);        will use middelware for all the routes
+//app.use(customMiddleware);        will use middelware for all the present routes
 
 app.listen(PORT, ()=>{
     console.log("server is running on ", PORT);
