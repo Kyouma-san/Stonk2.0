@@ -1,13 +1,18 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 const PORT = 5000;
+const {MONGOURI} = require('./keys');
 
-const customMiddleware = (req,res,next)=>{
-    console.log("middleware executed!!");
-    next();
-}
 
-app.use(customMiddleware);
+mongoose.connect(MONGOURI);
+mongoose.connection.on('connected',()=>{
+    console.log("connected to mongo");
+})
+mongoose.connection.on('error',(err)=>{
+    console.log("error faced while connecting to mongo: ", err);
+})
+//app.use(customMiddleware);        will use middelware for all the routes
 
 app.get('/', (req,res)=>{
     res.send("hello world");
