@@ -4,10 +4,23 @@ const mongoose = require('mongoose');
 const Portfolio = mongoose.model("Portfolio");
 const requireLogin = require('../middleware/requireLogin')
 
-router.post('/addStock', requireLogin, (req, res) => {
+router.get('/allStock', requireLogin, (req, res) => {
+    Portfolio.findOne({ userId: req.user })
+        .then(savedUser => {
+            if (savedUser) {
+                return res.json({ stock: savedUser.stocks })
+            } else {
+                return res.status(404).json({ error: "User not found" })
+            }
+        }).catch(err => {
+            return console.log(err);
+        })
+})
+
+router.post('/buyStock', requireLogin, (req, res) => {
     const { ticker, price, units } = req.body;
-    if (!ticker || !price || !units) {
-        return res.status(422).json({ error: "please add all the fields" })
+    if (!ticker || !price || !units || units <= 0 || price < 0) {
+        return res.status(422).json({ error: "please check all fields are added and they are correct" })
     }
 
     var oldPrice = + 0, oldUnits = + 0;
@@ -21,8 +34,6 @@ router.post('/addStock', requireLogin, (req, res) => {
                         oldPrice = + savedUser.stocks[i].price;
                         oldUnits = + savedUser.stocks[i].units;
                         flag = + 1;
-                        console.log(flag);
-                        console.log(typeof (flag));
                     }
                 }
 
@@ -68,6 +79,64 @@ router.post('/addStock', requireLogin, (req, res) => {
         })
 })
 
+router.post('/sellStock', requireLogin, (req, res) => {
+    const { ticker, price, units } = req.body;
+    if (!ticker || !price || !units || units <= 0 || price < 0) {
+        return res.status(422).json({ error: "please check all fields are added and they are correct" })
+    }
+
+    var oldPrice = + 0, oldUnits = + 0;
+    let flag = + 0;
+    Portfolio.findOne({ userId: req.user })
+        .then(savedUser => {
+            if (savedUser) {
+                for (let i in savedUser.stocks) {
+                    console.log("i :" + savedUser.stocks[i])
+                    if (savedUser.stocks[i].ticker == ticker) {
+                        oldPrice = + savedUser.stocks[i].price;
+                        oldUnits = + savedUser.stocks[i].units;
+                        flag = + 1;
+                    }
+                }
+
+            }
+            var EnteredUnits = + units;
+            var EnteredPrice = + price;
+            let newUnits = (oldUnits) - (EnteredUnits);
+            
+            
+            if (flag == 0) {
+                return res.status(422).json({ error: "Currently don't have this stock in portfolio" })
+            } else {
+                if(newUnits < 0){
+                    return res.status(422).json({ error: "Can't sell more that what you hold" })
+                }
+                if(newUnits > 0){
+                    Portfolio.updateOne({ userId: req.user, "stocks.ticker": ticker },
+                    { $set: { "stocks.$.units": newUnits } })
+                    .then(result => {
+                        return res.json({ portfolio: result })
+                    })
+                    .catch(err => {
+                        return console.log(err);
+                    })
+                } else {
+                    Portfolio.updateOne({ userId: req.user},
+                        { $pull: { stocks: {  ticker: ticker  } }})
+                        .then(result => {
+                            return res.json({ portfolio: result })
+                        })
+                        .catch(err => {
+                            return console.log(err);
+                        })
+                }
+                
+            }
+
+        }).catch(err => {
+            return console.log(err);
+        })
+})
 
 
 module.exports = router
