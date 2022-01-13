@@ -1,15 +1,15 @@
 import React from 'react'
-
+import {Link} from 'react-router-dom'
 
 const NavBar = ()=>{
     return (
   <nav>
   <div className="nav-wrapper white">
-    <a href="/" className="left brand-logo">Stonks</a>
+    <Link href="/" className="left brand-logo">Stonks</Link>
     <ul id="nav-mobile" className="right">
-      <li><a href="/signin">Login</a></li>
-      <li><a href="/signup">Signup</a></li>
-      <li><a href="/profile">Profile</a></li>
+      <li><Link href="/signin">Login</Link></li>
+      <li><Link href="/signup">Signup</Link></li>
+      <li><Link href="/profile">Profile</Link></li>
     </ul>
   </div>
 </nav>
