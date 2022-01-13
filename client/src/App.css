@@ -4,6 +4,11 @@ a{
   color: black !important;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgba(28, 95, 8, 0.897);
+  opacity: 0.5; /* Firefox */
+}
+
 .brand-logo {
   font-family: 'Black Ops One', cursive;     /* brand logo font */
   font-size: 50px !important;
