@@ -5,11 +5,11 @@ const NavBar = ()=>{
     return (
   <nav>
   <div className="nav-wrapper white">
-    <a href="#" className="left brand-logo">Logo</a>
+    <a href="/" className="left brand-logo">Stonks</a>
     <ul id="nav-mobile" className="right">
-      <li><a href="sass.html">Sass</a></li>
-      <li><a href="badges.html">Components</a></li>
-      <li><a href="collapsible.html">JavaScript</a></li>
+      <li><a href="/signin">Login</a></li>
+      <li><a href="/signup">Signup</a></li>
+      <li><a href="/profile">Profile</a></li>
     </ul>
   </div>
 </nav>
