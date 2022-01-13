@@ -1,1 +1,51 @@
 server/node_modules
+
+
+
+
+{
+
+[
+  {
+    "key": 1,
+    "stocks": [
+      {
+        "ticker": "Orcl",
+        "units": "1",
+        "price": "90.0"
+      },
+      {
+        "ticker": "DOCN",
+        "units": "1",
+        "price": "69.0"
+      }
+    ]
+  },
+  {
+    "key": 2
+  }
+]
+
+Query to remove the stock: db.collection.update({ key: 1},
+                                                { $pull: { stocks: {  ticker: "Orcl"  } }})
+                                                returns updated document
+
+Query to update the stock:
+db.collection.update({ key: 1,"stocks.ticker": "DOCN"},
+                     {$set: { "stocks.$.units": "82"}})
+                     returns updated document
+
+Query to add a new stock:
+db.collection.update({ key: 1},
+{                    $push: 
+                    {stocks: { 
+                     ticker: "rcl",  
+                     units: "1",  
+                      price: "90.0" 
+                       }
+                     }})
+
+
+
+
+
