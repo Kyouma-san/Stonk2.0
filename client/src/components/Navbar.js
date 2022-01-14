@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'   //used to avoid reloading each time goin
 const NavBar = ()=>{
     return (
   <nav>
-  <div className="nav-wrapper #8bc34a #aed581 light-green lighten-2">
+  <div className="nav-wrapper nav #8bc34a #212121 grey darken-4">
     <Link to="/" className="left brand-logo">Stonks</Link>
     <ul id="nav-mobile" className="right">
       <li><Link to="/signin">Login</Link></li>

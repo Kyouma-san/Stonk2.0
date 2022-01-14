@@ -1,22 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Hammersmith+One&family=Russo+One&display=swap');
+
+html,
+body {
+    margin: 0px;
+    height: 100%;
+}
+
+a,h2{
+  color: rgb(255, 255, 255) !important;
+}
 
 a{
-  color: black !important;
+  font-family: 'Hammersmith One', sans-serif;
 }
 
 /* signin/signup css start */
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: rgba(28, 95, 8, 0.897);
+  color: #ffffff;
   opacity: 0.5; /* Firefox */
 }
 
 .brand-logo {
-  font-family: 'Black Ops One', cursive;     /* brand logo font */
+  font-family: 'Russo One', sans-serif;     /* brand logo font */
   font-size: 50px !important;
 }
 
+#root {
+  margin: 0px !important;
+  background-image: url('image.jpg');
+  background-size: cover;
+    background-position: top center;
+    
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+  
+    
+}
 .mycard {
-  margin-top: 30px;
+  height: 80vh;
+  margin-top: 10px;
+  padding-top: 10vh;
+}
+
+.quote{
+ text-align: center;
+ font-family: 'Bebas Neue', cursive;
 }
 
 .auth-card{
@@ -24,16 +56,22 @@ a{
   text-align: center;
   max-width: 400px;
   margin: 10px auto;
+  border-radius: 25px;
+}
+
+.auth-btn{
+  color: black;
 }
 
 .input-field input[type=text]:focus {
-  border-bottom: 1px solid rgb(48, 109, 7) !important;
-  box-shadow: 0 1px 0 0 rgb(48, 109, 7) !important;
+  border-bottom: 1px solid rgb(0, 0, 0) !important;
+  box-shadow: 0 1px 0 0 rgb(0, 0, 0) !important;
 }
 /* signin/signup css end */
 
 
 /* profile css start */
+
 .profileoverview{
   display: flex;
   justify-content: space-around;
@@ -43,9 +81,32 @@ a{
  
 }
 
+.profileoverview-heading{
+  color: #ffffff;
+  text-align: center;
+  font-family: 'Bebas Neue', cursive;
+}
+
 .profileoverview-card{
   padding: 20px !important;
   width: 350px !important;
+}
+.stonks{
+  background-image: url('image.jpg');
+  background-size: cover;
+    background-position: top center;
+    
+    background-repeat: repeat;
+  display: flex;
+  justify-content: space-around;
+  margin: 18px 0px;
+  flex-wrap: wrap;
+  padding: 10px 10px ;
+}
+.profile-stock-card {
+  padding: 20px !important;
+  width: 350px !important;
+  
 }
 
 
