@@ -34,8 +34,19 @@ a{
 
 
 /* profile css start */
-.profileoverview {
-  background-color: aqua;
+.profileoverview{
+  display: flex;
+  justify-content: space-around;
+  margin: 18px 0px;
+  flex-wrap: wrap;
+  padding: 10px 10px ;
+ 
 }
+
+.profileoverview-card{
+  padding: 20px !important;
+  width: 350px !important;
+}
+
 
 /* profile css end */
