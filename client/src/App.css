@@ -4,6 +4,7 @@ a{
   color: black !important;
 }
 
+/* signin/signup css start */
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: rgba(28, 95, 8, 0.897);
   opacity: 0.5; /* Firefox */
@@ -29,3 +30,12 @@ a{
   border-bottom: 1px solid rgb(48, 109, 7) !important;
   box-shadow: 0 1px 0 0 rgb(48, 109, 7) !important;
 }
+/* signin/signup css end */
+
+
+/* profile css start */
+.profileoverview {
+  background-color: aqua;
+}
+
+/* profile css end */

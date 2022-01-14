@@ -1,10 +1,34 @@
 import React from 'react'
 
-const Profile = ()=>{
+const Profile = () => {
     return (
-        <h1>
-            Profile
-        </h1>
+        <div>
+            <h4 className="profileoverview-heading"> Portfolio Overview </h4>
+            <div className="profileoverview" style={{ display: 'flex', justifyContent: "space-around", margin: "18px 0px" }}>
+                    <div className="card auth-card input-field #f1f8e9 light-green lighten-5">
+                        <h5>Number of stocks in protfolio : 5</h5>
+                    </div>
+                    <div className="card auth-card input-field #f1f8e9 light-green lighten-5">
+                        <h5>Invested Amount ($) : 500</h5>
+                    </div>
+                    <div className="card auth-card input-field #f1f8e9 light-green lighten-5">
+                        <h5>Current Amount ($) : 1000</h5>
+                    </div>
+                    <div className="card auth-card input-field #f1f8e9 light-green lighten-5">
+                        <h5>Profit and Loss : 500($) or 100(%)</h5>
+                    </div>
+            </div>
+            <h4 className="profileoverview-heading">Stocks in Portfolio </h4>
+            <div className="stocks">
+                <div className="mycard">
+                    <div className="card auth-card input-field #f1f8e9 light-green lighten-5">
+                        <h2>Stonks</h2>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     )
 }
 
