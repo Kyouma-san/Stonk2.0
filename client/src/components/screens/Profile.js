@@ -69,6 +69,92 @@ const Profile = () => {
                 <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
                     <h5> STONKS</h5>
                 </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
+                    <h5> STONKS</h5>
+                </div>
+                
 
             </div>
         </div>
