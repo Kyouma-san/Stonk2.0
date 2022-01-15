@@ -8,7 +8,7 @@ const SignIn = () => {
                 <h2 className="brand-logo">Stonks</h2>
                 <input type="text" placeholder="email" />
                 <input type="text" placeholder="password" />
-                <button className="btn auth-btn waves-effect waves-light #ffffff white" >
+                <button className="btn auth-btn waves-effect waves-light #455a64 blue-grey darken-2" >
                     Login
                 </button >
                 <h6>
