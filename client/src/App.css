@@ -71,6 +71,9 @@ a{
 
 
 /* profile css start */
+.heading2{
+  width: 100vw;
+}
 
 .profileoverview{
   display: flex;

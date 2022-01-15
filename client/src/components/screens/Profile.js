@@ -18,8 +18,9 @@ const Profile = () => {
                     <h5> P/L : 500($) or 100(%)</h5>
                 </div>
             </div>
-            <h3 className="profileoverview-heading heading2">Stocks in Portfolio </h3>
+            
             <div className="stonks">
+            <h3 className="profileoverview-heading heading2">Stocks in Portfolio </h3>
                 <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
                 <h5> STONKS</h5>
                 </div>
