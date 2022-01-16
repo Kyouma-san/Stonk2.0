@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+var cors = require('cors')
 const PORT = 5000;
 const {MONGOURI} = require('./keys');
 
 
-
+app.use(cors())
 
 mongoose.connect(MONGOURI);
 mongoose.connection.on('connected',()=>{
