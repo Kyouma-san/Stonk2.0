@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import M from 'materialize-css'
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -12,13 +14,20 @@ const Signup = () => {
                 "Content-Type":"application/json"
             },
             body:JSON.stringify({
-                name:"",
-                password:"",
-                email:""
+                name,
+                password,
+                email
             })
         }).then(res=>res.json())
         .then(data=>{
-            console.log(data);
+           if(data.error){
+            M.toast({html: data.error, classes:"#ef5350 red lighten-1"})
+           } else {
+            M.toast({html: "Account created", classes:"#689f38 light-green darken-2"})
+            navigate('/signin');
+           }
+        }).catch(err=>{
+            console.log(err)
         })
     }
 
@@ -30,18 +39,21 @@ const Signup = () => {
                     type="text"
                     placeholder="name"
                     value={name}
+                    className="white-text"
                     onChange={(e)=>setName(e.target.value)}
                 />
                 <input
                     type="text"
                     placeholder="email"
                     value={email}
+                    className="white-text"
                     onChange={(e)=>setEmail(e.target.value)}
                 />
                 <input
                     type="text"
                     placeholder="password"
                     value={password}
+                    className="white-text"
                     onChange={(e)=>setPassword(e.target.value)}
                 />
                 <button className="btn auth-btn waves-effect waves-light #455a64 blue-grey darken-2" 

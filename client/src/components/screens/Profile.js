@@ -25,18 +25,18 @@ const Profile = () => {
                 <h3 className="profileoverview-heading heading2">Transactions </h3>
                 <div className="card auth-card input-field-transaction #263238 blue-grey darken-4">
                     <h2 className="brand-logo buy">Buy</h2>
-                    <input type="text" placeholder="ticker" />
-                    <input type="text" placeholder="units" />
-                    <input type="text" placeholder="price" />
+                    <input type="text" placeholder="ticker" className="white-text"/>
+                    <input type="text" placeholder="units" className="white-text"/>
+                    <input type="text" placeholder="price" className="white-text" />
                     <button className="btn auth-btn waves-effect waves-light #4fc3f7 light-blue lighten-2" >
                         Buy
                     </button >
                 </div>
                 <div className="card auth-card input-field-transaction #263238 blue-grey darken-4">
                     <h2 className="brand-logo sell" >Sell</h2>
-                    <input type="text" placeholder="ticker" />
-                    <input type="text" placeholder="units" />
-                    <input type="text" placeholder="price" />
+                    <input type="text" placeholder="ticker" className="white-text"/>
+                    <input type="text" placeholder="units" className="white-text"/>
+                    <input type="text" placeholder="price" className="white-text"/>
                     <button className="btn auth-btn waves-effect waves-light #9ccc65 light-green lighten-1" >
                         Sell
                     </button >
