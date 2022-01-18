@@ -24,18 +24,25 @@ const portfolioSchema = new mongoose.Schema({
             required:true
         },
         price:{
-            type:Decimal128,
+            type:String,
             required:true
         },
         units:{
-            type:Decimal128,
+            type:String,
+            required:true
+        },
+        marketPrice:{
+            type:String,
             required:true
         }
+
     }],
     userId:{
         type:ObjectId,
         ref:"User"
-    }
+    },
+    
+
 })
 
 mongoose.model("Portfolio", portfolioSchema);

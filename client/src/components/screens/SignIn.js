@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import {UserContext} from '../../App'
 import M from 'materialize-css'
 
 const SignIn = () => {
+    const {state,dispatch} = useContext(UserContext);
     const navigate = useNavigate();
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -17,13 +19,14 @@ const SignIn = () => {
                 email
             })
         }).then(res=>res.json())
-        .then(data=>{
+        .then( async data=>{
             console.log(data)
            if(data.error){
             M.toast({html: data.error, classes:"#ef5350 red lighten-1"})
            } else {
-               localStorage.setItem("jwt",data.token)
-               localStorage.setItem("user",JSON.stringify(data.user))
+              await localStorage.setItem("jwt",data.token)
+              await localStorage.setItem("user",JSON.stringify(data.user))
+               dispatch({type:"USER",payload:data.user});
             M.toast({html: "Signed in successfully!", classes:"#689f38 light-green darken-2"})
             navigate('/profile');
            }
