@@ -6,6 +6,30 @@ const mongoose = require('mongoose');
 const Portfolio = mongoose.model("Portfolio");
 const requireLogin = require('../middleware/requireLogin')
 
+
+router.get('/userProfile', requireLogin, (req, res) => {
+    Portfolio.findOne({ userId: req.user })
+        .then(savedUser => {
+            if (savedUser) {
+                console.log("found the user")
+                
+                var data = [
+                    {investedAmount: savedUser.investedAmount,
+                        currentAmount: savedUser.currentAmount,
+                        totalStocks: savedUser.totalStocks,
+                        pal:savedUser.pal}
+                ]
+                console.log(data)
+                res.json({ data })
+            } else {
+                var data = []
+                res.status(404).json({ data })
+            }
+        }).catch(err => {
+            return console.log(err);
+        })
+})
+
 router.get('/allUserStocks', requireLogin, (req, res) => {
     Portfolio.findOne({ userId: req.user })
         .then(savedUser => {
@@ -14,7 +38,7 @@ router.get('/allUserStocks', requireLogin, (req, res) => {
                 console.log("savedUser.stocks")
                 res.json({ savedUser })
             } else {
-                
+                var stonks = []
                 res.status(404).json({ stocks: stonks })
             }
         }).catch(err => {
@@ -74,6 +98,7 @@ router.post('/buyStock', requireLogin, (req, res) => {
 
         var oldPrice = + 0, oldUnits = + 0;
         let flag = + 0;
+        var totalStocks = + 0, investedAmount = + 0, currentAmount = + 0, pal = + 0;
         Portfolio.findOne({ userId: req.user })
             .then(savedUser => {
 
@@ -82,9 +107,17 @@ router.post('/buyStock', requireLogin, (req, res) => {
                     for (let i in savedUser.stocks) {
 
                         console.log("i :" + savedUser.stocks[i])
+                        totalStocks = totalStocks + 1;
+                        console.log(totalStocks)
+                        investedAmount = investedAmount + parseFloat(savedUser.stocks[i].price) * parseFloat(savedUser.stocks[i].units)
+                        console.log(investedAmount)
+                        currentAmount = currentAmount + parseFloat(savedUser.stocks[i].marketPrice) * parseFloat(savedUser.stocks[i].units)
+                        console.log(currentAmount)
+                        pal = (currentAmount-investedAmount)
+                        console.log(pal)
                         if (savedUser.stocks[i].ticker == ticker) {
                             oldPrice = + parseFloat(savedUser.stocks[i].price);
-                            oldUnits = + parseFloat(savedUser.stocks[i].units);
+                            oldUnits = + parseFloat(savedUser.stocks[i].price);
                             flag = + 1;
                         }
                     }
@@ -92,6 +125,8 @@ router.post('/buyStock', requireLogin, (req, res) => {
                 }
                 var EnteredUnits = + parseFloat(units);
                 var EnteredPrice = + parseFloat(price);
+                investedAmount = investedAmount + EnteredPrice*EnteredUnits;
+                currentAmount = currentAmount + EnteredPrice*EnteredUnits;
                 let newPrice = ((oldUnits * oldPrice) + (EnteredUnits * EnteredPrice));
                 newPrice = newPrice / ((oldUnits) + (EnteredUnits));
                 let newUnits = (oldUnits) + (EnteredUnits);
@@ -105,7 +140,11 @@ router.post('/buyStock', requireLogin, (req, res) => {
                                     price: (newPrice.toFixed(2)).toString(10),
                                     units: (newUnits.toFixed(2)).toString(10),
                                     marketPrice: (currentPrice.toFixed(2)).toString(10)
-                                }
+                                },
+                                totalStocks: (totalStocks).toString(10) ,
+                                investedAmount: (investedAmount.toFixed(2)).toString(10),
+                                currentAmount: (currentAmount.toFixed(2)).toString(10),
+                                pal: (pal.toFixed(2)).toString(10)
                             }
                         },
                         { upsert: true }
@@ -121,7 +160,11 @@ router.post('/buyStock', requireLogin, (req, res) => {
                             $set: {
                                 "stocks.$.units": (newUnits.toFixed(2)).toString(10),
                                 "stocks.$.price": (newPrice.toFixed(2)).toString(10),
-                                "stocks.$.marketPrice": (currentPrice.toFixed(2)).toString(10)
+                                "stocks.$.marketPrice": (currentPrice.toFixed(2)).toString(10),
+                                "totalStocks": (totalStocks).toString(10) ,
+                                "investedAmount": (investedAmount.toFixed(2)).toString(10),
+                                "currentAmount": (currentAmount.toFixed(2)).toString(10),
+                                "pal": (pal.toFixed(2)).toString(10)
                             }
                         })
                         .then(result => {

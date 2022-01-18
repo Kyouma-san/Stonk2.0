@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Profile = () => {
     const [data, setData] = useState([])
+    const [d, setValue] = useState([])
     useEffect(() => {
         fetch('http://localhost:5000/allUserStocks', {
             headers: {
@@ -20,6 +21,18 @@ const Profile = () => {
             })
 
 
+        fetch('http://localhost:5000/userProfile', {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("jwt")
+            }
+        }).then(res => res.json())
+            .then(data => {
+                console.log(data.data)
+                console.log(typeof (data.data))
+                setValue(data.data)
+            })
+
+
 
     }, [])
     return (
@@ -27,18 +40,27 @@ const Profile = () => {
 
             <div className="profileoverview" >
                 <h3 className="profileoverview-heading heading2"> Portfolio Overview </h3>
-                <div className="card profileoverview-card auth-card  #eceff1 blue-grey lighten-5">
-                    <h5>Total stocks in protfolio : 5</h5>
-                </div>
-                <div className="card profileoverview-card auth-card   #eceff1 blue-grey lighten-5">
-                    <h5>Invested Amount ($) : 500</h5>
-                </div>
-                <div className="card profileoverview-card auth-card #eceff1 blue-grey lighten-5">
-                    <h5>Current Amount ($) : 1000</h5>
-                </div>
-                <div className="card profileoverview-card auth-card  #eceff1 blue-grey lighten-5">
-                    <h5> P/L : 500($) or 100(%)</h5>
-                </div>
+                {
+                    d.map(item => {
+                        return (<div>
+                            <div className="card profileoverview-card auth-card  #eceff1 blue-grey lighten-5">
+                                <h5>Total stocks in protfolio : {item.totalStocks}</h5>
+                            </div>
+                            <div className="card profileoverview-card auth-card   #eceff1 blue-grey lighten-5">
+                                <h5>Invested Amount ($) : {item.investedAmount}</h5>
+                            </div>
+                            <div className="card profileoverview-card auth-card #eceff1 blue-grey lighten-5">
+                                <h5>Current Amount ($) : {item.currentAmount}</h5>
+                            </div>
+                            <div className="card profileoverview-card auth-card  #eceff1 blue-grey lighten-5">
+                                <h5> P/L : {item.pal}</h5>
+                            </div>
+                        </div>
+
+                        )
+                    })
+                }
+
             </div>
 
             <div className="transaction">
@@ -90,7 +112,7 @@ const Profile = () => {
                     data.map(item => {
                         return (
                             <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
-                                
+
                                 <h5>TICKER : {item.ticker} </h5>
                                 <h5>UNITS : {item.units} </h5>
                                 <h5>AVG PRICE : {item.price} </h5>

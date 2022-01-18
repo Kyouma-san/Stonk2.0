@@ -41,6 +41,22 @@ const portfolioSchema = new mongoose.Schema({
         type:ObjectId,
         ref:"User"
     },
+    totalStocks:{
+        type:String,
+        required:false
+    },
+    investedAmount:{
+        type:String,
+        required:false
+    },
+    currentAmount:{
+        type:String,
+        required:false
+    },
+    pal:{
+        type:String,
+        required:false
+    }
     
 
 })
