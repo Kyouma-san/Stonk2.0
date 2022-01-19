@@ -19,6 +19,7 @@ mongoose.connection.on('error',(err)=>{
 
 require('./models/user')
 require('./models/portfolio')
+require('./models/transaction')
 app.use(express.json());
 
 

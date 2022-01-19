@@ -4,8 +4,42 @@ const router = express.Router();
 const request = require('request');
 const mongoose = require('mongoose');
 const Portfolio = mongoose.model("Portfolio");
+const Transaction = mongoose.model("Transaction");
 const requireLogin = require('../middleware/requireLogin')
 
+router.get('/userTransactions', requireLogin, (req, res) => {
+    Transaction.findOne({ userId: req.user })
+        .then(savedUser => {
+            if (savedUser) {
+                console.log("found the user")
+                var t1,t2,t3,t4,t5;
+                var oldest = savedUser.oldest;
+                for (let i in savedUser.transactions) {
+                    if (savedUser.transactions[i].order == oldest) {
+                       t1 = savedUser.transactions[i];
+                    }
+                    if (savedUser.transactions[i].order == (oldest+1)%5) {
+                        t2 = savedUser.transactions[i];
+                     }
+                     if (savedUser.transactions[i].order == (oldest+2)%5) {
+                        t3 = savedUser.transactions[i];
+                     }
+                     if (savedUser.transactions[i].order == (oldest+3)%5) {
+                        t4 = savedUser.transactions[i];
+                     }
+                     if (savedUser.transactions[i].order == (oldest+4)%5) {
+                        t5 = savedUser.transactions[i];
+                     }
+                }
+                var transactions = [t1,t2,t3,t4,t5];
+                res.json({transactions })
+            } else {            
+                res.status(404).json({ error:"user not found" })
+            }
+        }).catch(err => {
+            return console.log(err);
+        })
+})
 
 router.get('/userProfile', requireLogin, (req, res) => {
     Portfolio.findOne({ userId: req.user })
@@ -125,7 +159,95 @@ router.post('/buyStock', requireLogin, (req, res) => {
 
         var oldPrice = + 0, oldUnits = + 0;
         let flag = + 0;
-        
+
+        ////ADDING TRANSACTIONS
+
+        Transaction.findOne({ userId: req.user })
+            .then(savedUser => {
+                if (savedUser) {
+                    if (!savedUser.full) {    //not full, just add at latest+1 order
+                        var latest = (savedUser.latest)
+                        var isFull = false;
+                        if(latest == 3) {  //after the entry of this transaction, all 5 enteries will be there(full)
+                            isFull = true;
+                        }
+                        Transaction.updateOne({ userId: req.user },
+                            {
+                                $push: {
+                                    transactions: {
+                                        ticker,
+                                        price,
+                                        units,
+                                        order: (latest) + 1,
+                                        orderType: "BUY"
+                                    }
+                                },
+                                $set: {
+                                    latest: latest + 1,
+                                    full: isFull
+                                  }
+
+                            },
+                            { upsert: true }
+                        ).then(result => {
+                            console.log("transaction added")
+                        })
+                        .catch(err => {
+                            console.log("error while adding transaction")
+                        })
+                    } else {    //replace the transaction which has order == oldest then change oldest = (oldest+1)%5
+                       var oldest = savedUser.oldest;
+                       oldest = (oldest + 1) %5;
+                        Transaction.updateOne({ userId: req.user, "transactions.order": savedUser.oldest },
+                            {
+                                $set: {
+                                    "transactions.$.units": units,
+                                    "transactions.$.price": price,
+                                    "transactions.$.ticker": ticker,
+                                    "oldest": oldest,
+                                    "transactions.$.orderType":"BUY"
+                                }
+                            }).then(result => {
+                                console.log("transaction added")
+                            })
+                            .catch(err => {
+                                console.log("error while adding transaction")
+                            })
+                    }
+                } else {  //not a saved user, so create one
+
+                    Transaction.updateOne({ userId: req.user },
+                        {
+                            $push: {
+                                transactions: {
+                                    ticker,
+                                    price,
+                                    units,
+                                    order: 0,
+                                    orderType: "BUY"
+                                }
+                            },
+                            $set: {
+                                latest: 0,
+                                full: false,
+                                oldest:0
+                              }
+
+                        },
+                        { upsert: true }
+                    ).then(result => {
+                        console.log("transaction added for new user")
+                    })
+                    .catch(err => {
+                        console.log("error while adding transaction")
+                    })
+
+                }
+            })
+
+
+
+
         Portfolio.findOne({ userId: req.user })
             .then(savedUser => {
 
@@ -145,13 +267,13 @@ router.post('/buyStock', requireLogin, (req, res) => {
                 var EnteredPrice = + parseFloat(price);
                 console.log("enterd Price :" + EnteredPrice)
                 console.log("entered units :" + EnteredUnits)
-                console.log("old units :"+ oldUnits)
+                console.log("old units :" + oldUnits)
 
                 let newPrice = ((oldUnits * oldPrice) + (EnteredUnits * EnteredPrice));
                 newPrice = newPrice / ((oldUnits) + (EnteredUnits));
                 let newUnits = (oldUnits) + (EnteredUnits);
-                console.log("new units :"+ newUnits)
-                console.log("new price :"+ newPrice)
+                console.log("new units :" + newUnits)
+                console.log("new price :" + newPrice)
                 if (flag == 0) {
                     console.log("new ticker / new user")
                     Portfolio.updateOne({ userId: req.user },
@@ -178,7 +300,7 @@ router.post('/buyStock', requireLogin, (req, res) => {
                             $set: {
                                 "stocks.$.units": (newUnits.toFixed(2)).toString(10),
                                 "stocks.$.price": (newPrice.toFixed(2)).toString(10),
-                                "stocks.$.marketPrice": (currentPrice.toFixed(2)).toString(10)                  
+                                "stocks.$.marketPrice": (currentPrice.toFixed(2)).toString(10)
                             }
                         })
                         .then(result => {
@@ -276,6 +398,91 @@ router.post('/sellStock', requireLogin, (req, res) => {
                             })
                         return res.status(422).json({ error: "Can't sell more that what you hold" })
                     }
+
+                    ////// ADDING transaction
+                    Transaction.findOne({ userId: req.user })
+                    .then(savedUser => {
+                        if (savedUser) {
+                            if (!savedUser.full) {    //not full, just add at latest+1 order
+                                var latest = (savedUser.latest)
+                                var isFull = false;
+                                if(latest == 3) {  //after the entry of this transaction, all 5 enteries will be there(full)
+                                    isFull = true;
+                                }
+                                Transaction.updateOne({ userId: req.user },
+                                    {
+                                        $push: {
+                                            transactions: {
+                                                ticker,
+                                                price,
+                                                units,
+                                                order: (latest) + 1,
+                                                orderType: "SELL"
+                                            }
+                                        },
+                                        $set: {
+                                            latest: latest + 1,
+                                            full: isFull
+                                          }
+        
+                                    },
+                                    { upsert: true }
+                                ).then(result => {
+                                    console.log("transaction added")
+                                })
+                                .catch(err => {
+                                    console.log("error while adding transaction")
+                                })
+                            } else {    //replace the transaction which has order == oldest then change oldest = (oldest+1)%5
+                               var oldest = savedUser.oldest;
+                               oldest = (oldest + 1) %5;
+                                Transaction.updateOne({ userId: req.user, "transactions.order": savedUser.oldest },
+                                    {
+                                        $set: {
+                                            "transactions.$.units": units,
+                                            "transactions.$.price": price,
+                                            "transactions.$.ticker": ticker,
+                                            "oldest": oldest,
+                                            "transactions.$.orderType": "SELL"
+                                        }
+                                    }).then(result => {
+                                        console.log("transaction added")
+                                    })
+                                    .catch(err => {
+                                        console.log("error while adding transaction")
+                                    })
+                            }
+                        } else {  //not a saved user, so create one
+        
+                            Transaction.updateOne({ userId: req.user },
+                                {
+                                    $push: {
+                                        transactions: {
+                                            ticker,
+                                            price,
+                                            units,
+                                            order: 0,
+                                            orderType: "SELL"
+                                        }
+                                    },
+                                    $set: {
+                                        latest: 0,
+                                        full: false,
+                                        oldest:0
+                                      }
+        
+                                },
+                                { upsert: true }
+                            ).then(result => {
+                                console.log("transaction added for new user")
+                            })
+                            .catch(err => {
+                                console.log("error while adding transaction")
+                            })
+        
+                        }
+                    })
+
                     if (newUnits > 0) {
                         Portfolio.updateOne({ userId: req.user, "stocks.ticker": ticker },
                             {
