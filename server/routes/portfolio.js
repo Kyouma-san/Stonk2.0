@@ -31,7 +31,7 @@ router.get('/userTransactions', requireLogin, (req, res) => {
                         t5 = savedUser.transactions[i];
                      }
                 }
-                var transactions = [t1,t2,t3,t4,t5];
+                var transactions = [t5,t4,t3,t2,t1];
                 res.json({transactions })
             } else {            
                 res.status(404).json({ error:"user not found" })
