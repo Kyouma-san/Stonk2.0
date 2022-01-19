@@ -14,7 +14,9 @@ router.get('/userTransactions', requireLogin, (req, res) => {
                 console.log("found the user")
                 var t1,t2,t3,t4,t5;
                 var oldest = savedUser.oldest;
+                var size = + 0;
                 for (let i in savedUser.transactions) {
+                    size = size + 1;
                     if (savedUser.transactions[i].order == oldest) {
                        t1 = savedUser.transactions[i];
                     }
@@ -31,10 +33,26 @@ router.get('/userTransactions', requireLogin, (req, res) => {
                         t5 = savedUser.transactions[i];
                      }
                 }
-                var transactions = [t5,t4,t3,t2,t1];
+                var transactions;
+                if(size == 1){
+                     transactions = [t1];
+                }
+                else if(size == 2){
+                     transactions = [t2,t1];
+                }
+                else if(size == 3){
+                    transactions = [t3,t2,t1];
+                }
+                else if(size == 4){
+                     transactions = [t4,t3,t2,t1];
+                }
+                else if(size == 5){
+                     transactions = [t5,t4,t3,t2,t1];
+                }
                 res.json({transactions })
-            } else {            
-                res.status(404).json({ error:"user not found" })
+            } else {      
+                var transactions = [];      
+                res.json({ transactions })
             }
         }).catch(err => {
             return console.log(err);
@@ -82,7 +100,7 @@ router.get('/userProfile', requireLogin, (req, res) => {
                         pal: 0
                     }
                 ]
-                res.status(404).json({ data })
+                res.json({ data })
             }
         }).catch(err => {
             return console.log(err);
@@ -100,7 +118,7 @@ router.get('/allUserStocks', requireLogin, (req, res) => {
                 var savedUser = {
                     stocks: []
                 }
-                res.status(404).json({ savedUser })
+                res.json({ savedUser })
             }
         }).catch(err => {
             return console.log(err);
