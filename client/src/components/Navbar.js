@@ -7,7 +7,8 @@ const NavBar = ()=>{
   const renderList = ()=>{
     if(state){
       return [
-        <li><Link to="/profile">Profile</Link></li>
+        <li><Link to="/profile">Profile</Link></li>,
+        <li><Link to="/portfolio">Portfolio</Link></li>
       ]
     }else{
       return [
