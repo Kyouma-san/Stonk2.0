@@ -12,9 +12,6 @@ const Profile = () => {
         }).then(res => res.json())
             .then(data => {
                 console.log(data)
-                console.log(typeof (data))
-                console.log(data.savedUser)
-                console.log(typeof (data.savedUser))
                 console.log(data.savedUser.stocks)
                 console.log(typeof (data.savedUser.stocks))
                 setData(data.savedUser.stocks)
@@ -32,17 +29,18 @@ const Profile = () => {
                 setValue(data.data)
             })
 
-
+            return () => {
+                setData({});
+                setValue({});
+              };
 
     }, [])
     return (
         <div className="portfolio">
-
-            <div className="profileoverview" >
-                <h3 className="profileoverview-heading heading2"> Portfolio Overview </h3>
                 {
                     d.map(item => {
-                        return (<div>
+                        return (<div className="profileoverview">
+                            <h3 className="profileoverview-heading heading2"> Portfolio Overview </h3>
                             <div className="card profileoverview-card auth-card  #eceff1 blue-grey lighten-5">
                                 <h5>Total stocks in protfolio : {item.totalStocks}</h5>
                             </div>
@@ -53,7 +51,7 @@ const Profile = () => {
                                 <h5>Current Amount ($) : {item.currentAmount}</h5>
                             </div>
                             <div className="card profileoverview-card auth-card  #eceff1 blue-grey lighten-5">
-                                <h5> P/L : {item.pal}</h5>
+                                <h5> P/L ($): {item.pal}</h5>
                             </div>
                         </div>
 
@@ -61,7 +59,7 @@ const Profile = () => {
                     })
                 }
 
-            </div>
+            
 
             <div className="transaction">
                 <h3 className="profileoverview-heading heading2">Transactions </h3>
@@ -108,8 +106,7 @@ const Profile = () => {
 
             <div className="stonks">
                 <h3 className="profileoverview-heading heading2">Stocks in Portfolio </h3>
-                {
-                    data.map(item => {
+                {  data.map(item => {
                         return (
                             <div className="card profile-stock-card auth-card input-field #eceff1 blue-grey lighten-5">
 
@@ -120,6 +117,8 @@ const Profile = () => {
                             </div>
                         )
                     })
+                  
+                    
                 }
             </div>
         </div>

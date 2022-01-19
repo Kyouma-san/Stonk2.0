@@ -11,18 +11,43 @@ router.get('/userProfile', requireLogin, (req, res) => {
     Portfolio.findOne({ userId: req.user })
         .then(savedUser => {
             if (savedUser) {
+
                 console.log("found the user")
-                
+
+                var totalStocks = + 0, investedAmount = + 0, currentAmount = + 0, pal = + 0;
+                for (let i in savedUser.stocks) {
+
+                    console.log("i :" + savedUser.stocks[i])
+                    totalStocks = totalStocks + 1;
+                    console.log(totalStocks)
+                    investedAmount = investedAmount + parseFloat(savedUser.stocks[i].price) * parseFloat(savedUser.stocks[i].units)
+                    console.log(investedAmount)
+                    currentAmount = currentAmount + parseFloat(savedUser.stocks[i].marketPrice) * parseFloat(savedUser.stocks[i].units)
+                    console.log(currentAmount)
+                    pal = (currentAmount - investedAmount)
+                    console.log(pal)
+                }
+
+
                 var data = [
-                    {investedAmount: savedUser.investedAmount,
-                        currentAmount: savedUser.currentAmount,
-                        totalStocks: savedUser.totalStocks,
-                        pal:savedUser.pal}
+                    {
+                        investedAmount,
+                        currentAmount,
+                        totalStocks,
+                        pal
+                    }
                 ]
                 console.log(data)
                 res.json({ data })
             } else {
-                var data = []
+                var data = [
+                    {
+                        investedAmount: 0,
+                        currentAmount: 0,
+                        totalStocks: 0,
+                        pal: 0
+                    }
+                ]
                 res.status(404).json({ data })
             }
         }).catch(err => {
@@ -38,8 +63,10 @@ router.get('/allUserStocks', requireLogin, (req, res) => {
                 console.log("savedUser.stocks")
                 res.json({ savedUser })
             } else {
-                var stonks = []
-                res.status(404).json({ stocks: stonks })
+                var savedUser = {
+                    stocks: []
+                }
+                res.status(404).json({ savedUser })
             }
         }).catch(err => {
             return console.log(err);
@@ -98,38 +125,33 @@ router.post('/buyStock', requireLogin, (req, res) => {
 
         var oldPrice = + 0, oldUnits = + 0;
         let flag = + 0;
-        var totalStocks = + 0, investedAmount = + 0, currentAmount = + 0, pal = + 0;
+        
         Portfolio.findOne({ userId: req.user })
             .then(savedUser => {
 
                 if (savedUser) {
                     console.log("saved user")
                     for (let i in savedUser.stocks) {
-
-                        console.log("i :" + savedUser.stocks[i])
-                        totalStocks = totalStocks + 1;
-                        console.log(totalStocks)
-                        investedAmount = investedAmount + parseFloat(savedUser.stocks[i].price) * parseFloat(savedUser.stocks[i].units)
-                        console.log(investedAmount)
-                        currentAmount = currentAmount + parseFloat(savedUser.stocks[i].marketPrice) * parseFloat(savedUser.stocks[i].units)
-                        console.log(currentAmount)
-                        pal = (currentAmount-investedAmount)
-                        console.log(pal)
                         if (savedUser.stocks[i].ticker == ticker) {
                             oldPrice = + parseFloat(savedUser.stocks[i].price);
-                            oldUnits = + parseFloat(savedUser.stocks[i].price);
+                            oldUnits = + parseFloat(savedUser.stocks[i].units);
                             flag = + 1;
                         }
                     }
 
                 }
                 var EnteredUnits = + parseFloat(units);
+
                 var EnteredPrice = + parseFloat(price);
-                investedAmount = investedAmount + EnteredPrice*EnteredUnits;
-                currentAmount = currentAmount + EnteredPrice*EnteredUnits;
+                console.log("enterd Price :" + EnteredPrice)
+                console.log("entered units :" + EnteredUnits)
+                console.log("old units :"+ oldUnits)
+
                 let newPrice = ((oldUnits * oldPrice) + (EnteredUnits * EnteredPrice));
                 newPrice = newPrice / ((oldUnits) + (EnteredUnits));
                 let newUnits = (oldUnits) + (EnteredUnits);
+                console.log("new units :"+ newUnits)
+                console.log("new price :"+ newPrice)
                 if (flag == 0) {
                     console.log("new ticker / new user")
                     Portfolio.updateOne({ userId: req.user },
@@ -140,11 +162,7 @@ router.post('/buyStock', requireLogin, (req, res) => {
                                     price: (newPrice.toFixed(2)).toString(10),
                                     units: (newUnits.toFixed(2)).toString(10),
                                     marketPrice: (currentPrice.toFixed(2)).toString(10)
-                                },
-                                totalStocks: (totalStocks).toString(10) ,
-                                investedAmount: (investedAmount.toFixed(2)).toString(10),
-                                currentAmount: (currentAmount.toFixed(2)).toString(10),
-                                pal: (pal.toFixed(2)).toString(10)
+                                }
                             }
                         },
                         { upsert: true }
@@ -160,11 +178,7 @@ router.post('/buyStock', requireLogin, (req, res) => {
                             $set: {
                                 "stocks.$.units": (newUnits.toFixed(2)).toString(10),
                                 "stocks.$.price": (newPrice.toFixed(2)).toString(10),
-                                "stocks.$.marketPrice": (currentPrice.toFixed(2)).toString(10),
-                                "totalStocks": (totalStocks).toString(10) ,
-                                "investedAmount": (investedAmount.toFixed(2)).toString(10),
-                                "currentAmount": (currentAmount.toFixed(2)).toString(10),
-                                "pal": (pal.toFixed(2)).toString(10)
+                                "stocks.$.marketPrice": (currentPrice.toFixed(2)).toString(10)                  
                             }
                         })
                         .then(result => {
@@ -264,9 +278,11 @@ router.post('/sellStock', requireLogin, (req, res) => {
                     }
                     if (newUnits > 0) {
                         Portfolio.updateOne({ userId: req.user, "stocks.ticker": ticker },
-                            { $set: { 
-                                "stocks.$.units": (newUnits.toFixed(2)).toString(10), 
-                                "stocks.$.marketPrice": (currentPrice.toFixed(2)).toString(10) } 
+                            {
+                                $set: {
+                                    "stocks.$.units": (newUnits.toFixed(2)).toString(10),
+                                    "stocks.$.marketPrice": (currentPrice.toFixed(2)).toString(10)
+                                }
                             })
                             .then(result => {
                                 return res.json({ portfolio: result })
