@@ -8,7 +8,8 @@ const NavBar = ()=>{
     if(state){
       return [
         <li><Link to="/profile">Profile</Link></li>,
-        <li><Link to="/portfolio">Portfolio</Link></li>
+        <li><Link to="/portfolio">Portfolio</Link></li>,
+        <li><Link to="/transaction">Transaction</Link></li>
       ]
     }else{
       return [
