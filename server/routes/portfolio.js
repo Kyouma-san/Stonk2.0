@@ -536,7 +536,7 @@ router.post('/sellStock', requireLogin, (req, res) => {
     });
 
 
-})
+}) 
 
 
 module.exports = router
