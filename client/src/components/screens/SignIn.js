@@ -19,13 +19,13 @@ const SignIn = () => {
                 email
             })
         }).then(res=>res.json())
-        .then( async data=>{
+        .then(data=>{
             console.log(data)
            if(data.error){
             M.toast({html: data.error, classes:"#ef5350 red lighten-1"})
            } else {
-              await localStorage.setItem("jwt",data.token)
-              await localStorage.setItem("user",JSON.stringify(data.user))
+               localStorage.setItem("jwt",data.token)
+               localStorage.setItem("user",JSON.stringify(data.user))
                dispatch({type:"USER",payload:data.user});
             M.toast({html: "Signed in successfully!", classes:"#689f38 light-green darken-2"})
             navigate('/profile');
@@ -46,7 +46,7 @@ const SignIn = () => {
                     onChange={(e)=>setEmail(e.target.value)}
                 />
                 <input
-                    type="text"
+                    type="password"
                     placeholder="password"
                     value={password}
                     className="white-text"

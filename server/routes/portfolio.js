@@ -12,46 +12,46 @@ router.get('/userTransactions', requireLogin, (req, res) => {
         .then(savedUser => {
             if (savedUser) {
                 console.log("found the user")
-                var t1,t2,t3,t4,t5;
+                var t1, t2, t3, t4, t5;
                 var oldest = savedUser.oldest;
                 var size = + 0;
                 for (let i in savedUser.transactions) {
                     size = size + 1;
                     if (savedUser.transactions[i].order == oldest) {
-                       t1 = savedUser.transactions[i];
+                        t1 = savedUser.transactions[i];
                     }
-                    if (savedUser.transactions[i].order == (oldest+1)%5) {
+                    if (savedUser.transactions[i].order == (oldest + 1) % 5) {
                         t2 = savedUser.transactions[i];
-                     }
-                     if (savedUser.transactions[i].order == (oldest+2)%5) {
+                    }
+                    if (savedUser.transactions[i].order == (oldest + 2) % 5) {
                         t3 = savedUser.transactions[i];
-                     }
-                     if (savedUser.transactions[i].order == (oldest+3)%5) {
+                    }
+                    if (savedUser.transactions[i].order == (oldest + 3) % 5) {
                         t4 = savedUser.transactions[i];
-                     }
-                     if (savedUser.transactions[i].order == (oldest+4)%5) {
+                    }
+                    if (savedUser.transactions[i].order == (oldest + 4) % 5) {
                         t5 = savedUser.transactions[i];
-                     }
+                    }
                 }
                 var transactions;
-                if(size == 1){
-                     transactions = [t1];
+                if (size == 1) {
+                    transactions = [t1];
                 }
-                else if(size == 2){
-                     transactions = [t2,t1];
+                else if (size == 2) {
+                    transactions = [t2, t1];
                 }
-                else if(size == 3){
-                    transactions = [t3,t2,t1];
+                else if (size == 3) {
+                    transactions = [t3, t2, t1];
                 }
-                else if(size == 4){
-                     transactions = [t4,t3,t2,t1];
+                else if (size == 4) {
+                    transactions = [t4, t3, t2, t1];
                 }
-                else if(size == 5){
-                     transactions = [t5,t4,t3,t2,t1];
+                else if (size == 5) {
+                    transactions = [t5, t4, t3, t2, t1];
                 }
-                res.json({transactions })
-            } else {      
-                var transactions = [];      
+                res.json({ transactions })
+            } else {
+                var transactions = [];
                 res.json({ transactions })
             }
         }).catch(err => {
@@ -143,15 +143,15 @@ router.post('/buyStock', requireLogin, (req, res) => {
             ticker,
             price,
             units
-        }
+        },
+        timeout: 9000
     };
     request(requestOptions, (err, response, body) => {
         console.log("req-options")
-        console.log(typeof (response.body))
-        if (err) {
-            console.log("error")
-            return console.log(err);
+        if(err){
+           return res.json({error:"TimeOut (API limit reached), retry after sometime"})
         }
+        
         var currentPrice = + 0;
         for (var i in response.body) {
 
@@ -191,7 +191,7 @@ router.post('/buyStock', requireLogin, (req, res) => {
                     if (!savedUser.full) {    //not full, just add at latest+1 order
                         var latest = (savedUser.latest)
                         var isFull = false;
-                        if(latest == 3) {  //after the entry of this transaction, all 5 enteries will be there(full)
+                        if (latest == 3) {  //after the entry of this transaction, all 5 enteries will be there(full)
                             isFull = true;
                         }
                         Transaction.updateOne({ userId: req.user },
@@ -208,19 +208,19 @@ router.post('/buyStock', requireLogin, (req, res) => {
                                 $set: {
                                     latest: latest + 1,
                                     full: isFull
-                                  }
+                                }
 
                             },
                             { upsert: true }
                         ).then(result => {
                             console.log("transaction added")
                         })
-                        .catch(err => {
-                            console.log("error while adding transaction")
-                        })
+                            .catch(err => {
+                                console.log("error while adding transaction")
+                            })
                     } else {    //replace the transaction which has order == oldest then change oldest = (oldest+1)%5
-                       var oldest = savedUser.oldest;
-                       oldest = (oldest + 1) %5;
+                        var oldest = savedUser.oldest;
+                        oldest = (oldest + 1) % 5;
                         Transaction.updateOne({ userId: req.user, "transactions.order": savedUser.oldest },
                             {
                                 $set: {
@@ -228,7 +228,7 @@ router.post('/buyStock', requireLogin, (req, res) => {
                                     "transactions.$.price": price,
                                     "transactions.$.ticker": ticker,
                                     "oldest": oldest,
-                                    "transactions.$.orderType":"BUY"
+                                    "transactions.$.orderType": "BUY"
                                 }
                             }).then(result => {
                                 console.log("transaction added")
@@ -253,17 +253,17 @@ router.post('/buyStock', requireLogin, (req, res) => {
                             $set: {
                                 latest: 0,
                                 full: false,
-                                oldest:0
-                              }
+                                oldest: 0
+                            }
 
                         },
                         { upsert: true }
                     ).then(result => {
                         console.log("transaction added for new user")
                     })
-                    .catch(err => {
-                        console.log("error while adding transaction")
-                    })
+                        .catch(err => {
+                            console.log("error while adding transaction")
+                        })
 
                 }
             })
@@ -344,7 +344,6 @@ router.post('/buyStock', requireLogin, (req, res) => {
 
 })
 
-
 router.post('/sellStock', requireLogin, (req, res) => {
     let { ticker, price, units } = req.body;
     ticker = ticker.toUpperCase();
@@ -356,15 +355,15 @@ router.post('/sellStock', requireLogin, (req, res) => {
             ticker,
             price,
             units
-        }
+        },
+        timeout: 9000
     };
     request(requestOptions, (err, response, body) => {
         console.log("req-options")
         console.log(typeof (response.body))
-        if (err) {
-            console.log("error")
-            return console.log(err);
-        }
+        if(err){
+            return res.json({error:"TimeOut (API limit reached), retry after sometime"})
+         }
         var currentPrice = + 0;
         for (var i in response.body) {
 
@@ -424,14 +423,59 @@ router.post('/sellStock', requireLogin, (req, res) => {
 
                     ////// ADDING transaction
                     Transaction.findOne({ userId: req.user })
-                    .then(savedUser => {
-                        if (savedUser) {
-                            if (!savedUser.full) {    //not full, just add at latest+1 order
-                                var latest = (savedUser.latest)
-                                var isFull = false;
-                                if(latest == 3) {  //after the entry of this transaction, all 5 enteries will be there(full)
-                                    isFull = true;
+                        .then(savedUser => {
+                            if (savedUser) {
+                                if (!savedUser.full) {    //not full, just add at latest+1 order
+                                    var latest = (savedUser.latest)
+                                    var isFull = false;
+                                    if (latest == 3) {  //after the entry of this transaction, all 5 enteries will be there(full)
+                                        isFull = true;
+                                    }
+                                    Transaction.updateOne({ userId: req.user },
+                                        {
+                                            $push: {
+                                                transactions: {
+                                                    ticker,
+                                                    price,
+                                                    units,
+                                                    order: (latest) + 1,
+                                                    orderType: "SELL"
+                                                }
+                                            },
+                                            $set: {
+                                                latest: latest + 1,
+                                                full: isFull
+                                            }
+
+                                        },
+                                        { upsert: true }
+                                    ).then(result => {
+                                        console.log("transaction added")
+                                    })
+                                        .catch(err => {
+                                            console.log("error while adding transaction")
+                                        })
+                                } else {    //replace the transaction which has order == oldest then change oldest = (oldest+1)%5
+                                    var oldest = savedUser.oldest;
+                                    oldest = (oldest + 1) % 5;
+                                    Transaction.updateOne({ userId: req.user, "transactions.order": savedUser.oldest },
+                                        {
+                                            $set: {
+                                                "transactions.$.units": units,
+                                                "transactions.$.price": price,
+                                                "transactions.$.ticker": ticker,
+                                                "oldest": oldest,
+                                                "transactions.$.orderType": "SELL"
+                                            }
+                                        }).then(result => {
+                                            console.log("transaction added")
+                                        })
+                                        .catch(err => {
+                                            console.log("error while adding transaction")
+                                        })
                                 }
+                            } else {  //not a saved user, so create one
+
                                 Transaction.updateOne({ userId: req.user },
                                     {
                                         $push: {
@@ -439,72 +483,27 @@ router.post('/sellStock', requireLogin, (req, res) => {
                                                 ticker,
                                                 price,
                                                 units,
-                                                order: (latest) + 1,
+                                                order: 0,
                                                 orderType: "SELL"
                                             }
                                         },
                                         $set: {
-                                            latest: latest + 1,
-                                            full: isFull
-                                          }
-        
+                                            latest: 0,
+                                            full: false,
+                                            oldest: 0
+                                        }
+
                                     },
                                     { upsert: true }
                                 ).then(result => {
-                                    console.log("transaction added")
+                                    console.log("transaction added for new user")
                                 })
-                                .catch(err => {
-                                    console.log("error while adding transaction")
-                                })
-                            } else {    //replace the transaction which has order == oldest then change oldest = (oldest+1)%5
-                               var oldest = savedUser.oldest;
-                               oldest = (oldest + 1) %5;
-                                Transaction.updateOne({ userId: req.user, "transactions.order": savedUser.oldest },
-                                    {
-                                        $set: {
-                                            "transactions.$.units": units,
-                                            "transactions.$.price": price,
-                                            "transactions.$.ticker": ticker,
-                                            "oldest": oldest,
-                                            "transactions.$.orderType": "SELL"
-                                        }
-                                    }).then(result => {
-                                        console.log("transaction added")
-                                    })
                                     .catch(err => {
                                         console.log("error while adding transaction")
                                     })
+
                             }
-                        } else {  //not a saved user, so create one
-        
-                            Transaction.updateOne({ userId: req.user },
-                                {
-                                    $push: {
-                                        transactions: {
-                                            ticker,
-                                            price,
-                                            units,
-                                            order: 0,
-                                            orderType: "SELL"
-                                        }
-                                    },
-                                    $set: {
-                                        latest: 0,
-                                        full: false,
-                                        oldest:0
-                                      }
-        
-                                },
-                                { upsert: true }
-                            ).then(result => {
-                                console.log("transaction added for new user")
-                            })
-                            .catch(err => {
-                                console.log("error while adding transaction")
-                            })
-        
-                        }
-                    })
+                        })
 
                     if (newUnits > 0) {
                         Portfolio.updateOne({ userId: req.user, "stocks.ticker": ticker },
@@ -541,7 +540,7 @@ router.post('/sellStock', requireLogin, (req, res) => {
     });
 
 
-}) 
+})
 
 
 module.exports = router

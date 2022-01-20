@@ -30,7 +30,7 @@ const Transaction = () => {
     const buyStockV2 = async () => {
         try {
             const response = await fetchWithTimeout('http://localhost:5000/buyStock', {
-                timeout: 6000,
+                timeout: 10000,
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -54,14 +54,14 @@ const Transaction = () => {
         } catch (error) {
             // Timeouts if the request takes
             // longer than 6 seconds
-            M.toast({ html: "TimeOut (API limit reached), retry after 1 min", classes: "#ef5350 red lighten-1" })
+            M.toast({ html: "TimeOut (API limit reached), retry after sometime", classes: "#ef5350 red lighten-1" })
         }
     }
 
     const sellStockV2 = async () => {
         try {
             const response = await fetchWithTimeout('http://localhost:5000/sellStock', {
-                timeout: 6000,
+                timeout: 10000,
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -85,7 +85,7 @@ const Transaction = () => {
         } catch (error) {
             // Timeouts if the request takes
             // longer than 6 seconds
-            M.toast({ html: "TimeOut (API limit reached), retry after 1 min", classes: "#ef5350 red lighten-1" })
+            M.toast({ html: "TimeOut (API limit reached), retry after sometime", classes: "#ef5350 red lighten-1" })
         }
     }
 
