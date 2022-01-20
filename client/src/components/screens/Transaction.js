@@ -5,59 +5,93 @@ import M from 'materialize-css'
 const Transaction = () => {
     ////// FOR BUY/SELL
     const navigate = useNavigate();
-    const [ticker, setTicker] = useState("");
-    const [units, setUnits] = useState("");
-    const [price, setPrice] = useState("");
-    const buyStock = () => {
-        fetch("http://localhost:5000/buyStock", {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("jwt")
-            },
-            body: JSON.stringify({
-                ticker,
-                units,
-                price,
-            })
-        }).then(res => res.json())
-            .then(data => {
-                if (data.error) {
-                    M.toast({ html: data.error, classes: "#ef5350 red lighten-1" })
-                } else {
-                    M.toast({ html: "Transaction Successful", classes: "#689f38 light-green darken-2" })
-                    navigate('/profile');
-                }
-            }).catch(err => {
-                console.log(err)
-            })
+    const [buy_ticker, setBUYTicker] = useState("");
+    const [buy_units, setBUYUnits] = useState("");
+    const [buy_price, setBUYPrice] = useState("");
+
+    const [sell_ticker, setSELLTicker] = useState("");
+    const [sell_units, setSELLUnits] = useState("");
+    const [sell_price, setSELLPrice] = useState("");
+
+    /// FETCH TIMEOUT ADDED
+    async function fetchWithTimeout(resource, options = {}) {
+        const { timeout = 8000 } = options;
+
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        const response = await fetch(resource, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(id);
+        return response;
     }
 
+    const buyStockV2 = async () => {
+        try {
+            const response = await fetchWithTimeout('http://localhost:5000/buyStock', {
+                timeout: 6000,
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("jwt")
+                },
+                body: JSON.stringify({
+                    ticker:buy_ticker,
+                    units: buy_units,
+                    price: buy_price
+                })
+            });
 
-    const sellStock = () => {
-        fetch("http://localhost:5000/sellStock", {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("jwt")
-            },
-            body: JSON.stringify({
-                ticker,
-                units,
-                price,
-            })
-        }).then(res => res.json())
-            .then(data => {
-                if (data.error) {
-                    M.toast({ html: data.error, classes: "#ef5350 red lighten-1" })
-                } else {
-                    M.toast({ html: "Transaction Successful", classes: "#689f38 light-green darken-2" })
-                    navigate('/profile');
-                }
-            }).catch(err => {
-                console.log(err)
-            })
+            const data = await response.json();
+            if (data.error) {
+                M.toast({ html: data.error, classes: "#ef5350 red lighten-1" })
+            } else {
+                M.toast({ html: "Transaction Successful", classes: "#689f38 light-green darken-2" })
+                navigate('/profile');
+            }
+
+        } catch (error) {
+            // Timeouts if the request takes
+            // longer than 6 seconds
+            M.toast({ html: "TimeOut (API limit reached), retry after 1 min", classes: "#ef5350 red lighten-1" })
+        }
     }
+
+    const sellStockV2 = async () => {
+        try {
+            const response = await fetchWithTimeout('http://localhost:5000/sellStock', {
+                timeout: 6000,
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("jwt")
+                },
+                body: JSON.stringify({
+                    ticker:sell_ticker,
+                    units:sell_units,
+                    price:sell_price
+                })
+            });
+
+            const data = await response.json();
+            if (data.error) {
+                M.toast({ html: data.error, classes: "#ef5350 red lighten-1" })
+            } else {
+                M.toast({ html: "Transaction Successful", classes: "#689f38 light-green darken-2" })
+                navigate('/profile');
+            }
+
+        } catch (error) {
+            // Timeouts if the request takes
+            // longer than 6 seconds
+            M.toast({ html: "TimeOut (API limit reached), retry after 1 min", classes: "#ef5350 red lighten-1" })
+        }
+    }
+
+    ///
+
+
 
 
     //////// FOR GETTING LATEST 5 TRANSACTIONS
@@ -95,26 +129,26 @@ const Transaction = () => {
                     <input
                         type="text"
                         placeholder="ticker"
-                        value={ticker}
+                        value={buy_ticker}
                         className="white-text"
-                        onChange={(e) => setTicker(e.target.value)}
+                        onChange={(e) => setBUYTicker(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="units"
-                        value={units}
+                        value={buy_units}
                         className="white-text"
-                        onChange={(e) => setUnits(e.target.value)}
+                        onChange={(e) => setBUYUnits(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="price"
-                        value={price}
+                        value={buy_price}
                         className="white-text"
-                        onChange={(e) => setPrice(e.target.value)}
+                        onChange={(e) => setBUYPrice(e.target.value)}
                     />
                     <button className="btn auth-btn waves-effect waves-light #4fc3f7 light-blue lighten-2"
-                    onClick={()=>buyStock()} >
+                        onClick={() => buyStockV2()} >
                         Buy
                     </button >
                 </div>
@@ -123,26 +157,26 @@ const Transaction = () => {
                     <input
                         type="text"
                         placeholder="ticker"
-                        value={ticker}
+                        value={sell_ticker}
                         className="white-text"
-                        onChange={(e) => setTicker(e.target.value)}
+                        onChange={(e) => setSELLTicker(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="units"
-                        value={units}
+                        value={sell_units}
                         className="white-text"
-                        onChange={(e) => setUnits(e.target.value)}
+                        onChange={(e) => setSELLUnits(e.target.value)}
                     />
                     <input
                         type="text"
                         placeholder="price"
-                        value={price}
+                        value={sell_price}
                         className="white-text"
-                        onChange={(e) => setPrice(e.target.value)}
+                        onChange={(e) => setSELLPrice(e.target.value)}
                     />
-                    <button className="btn auth-btn waves-effect waves-light #9ccc65 light-green lighten-1" 
-                    onClick={()=>sellStock()}>
+                    <button className="btn auth-btn waves-effect waves-light #9ccc65 light-green lighten-1"
+                        onClick={() => sellStockV2()}>
                         Sell
                     </button >
                 </div>

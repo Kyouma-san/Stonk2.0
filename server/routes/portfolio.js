@@ -80,6 +80,11 @@ router.get('/userProfile', requireLogin, (req, res) => {
                     console.log(pal)
                 }
 
+                investedAmount = investedAmount.toFixed(2);
+                currentAmount = currentAmount.toFixed(2);
+                pal = pal.toFixed(2);
+
+
 
                 var data = [
                     {
@@ -138,7 +143,7 @@ router.post('/buyStock', requireLogin, (req, res) => {
             ticker,
             price,
             units
-        },
+        }
     };
     request(requestOptions, (err, response, body) => {
         console.log("req-options")
@@ -351,7 +356,7 @@ router.post('/sellStock', requireLogin, (req, res) => {
             ticker,
             price,
             units
-        },
+        }
     };
     request(requestOptions, (err, response, body) => {
         console.log("req-options")
