@@ -90,7 +90,8 @@ const Portfolio = () => {
                         <h5>MKT PRICE : {item.marketPrice} </h5>
                         <button className="btn auth-btn waves-effect waves-light #e57373 red lighten-2"
                             onClick={() => sellStockV2(item.ticker,item.units,item.price)} >
-                            Remove
+                                 
+                            Remove 
                         </button >
                     </div>
                 )

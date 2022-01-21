@@ -176,7 +176,12 @@ router.post('/buyStock', requireLogin, (req, res) => {
         const { ticker, price, units } = requestOptions.json;
 
 
-        if (!ticker || !price || !units || units <= 0 || price < 0) {
+        if(isNaN(parseFloat(price)) || isNaN(parseFloat(units))){
+            return res.status(422).json({ error: "please check all fields are added and they are correct" })
+        }
+
+
+        if (!ticker || !price || !units || parseFloat(units) <= 0 || parseFloat(price)<0) {
             return res.status(422).json({ error: "please check all fields are added and they are correct" })
         }
 
@@ -383,7 +388,12 @@ router.post('/sellStock', requireLogin, (req, res) => {
             return res.status(404).json({ error: "TICKER NOT FOUND" })
         }
         const { ticker, price, units } = requestOptions.json;
-        if (!ticker || !price || !units || units <= 0 || price < 0) {
+        if(isNaN(parseFloat(price)) || isNaN(parseFloat(units))){
+            return res.status(422).json({ error: "please check all fields are added and they are correct" })
+        }
+
+
+        if (!ticker || !price || !units || parseFloat(units) <= 0 || parseFloat(price)<0) {
             return res.status(422).json({ error: "please check all fields are added and they are correct" })
         }
         var oldPrice = + 0, oldUnits = + 0;
