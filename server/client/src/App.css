@@ -41,6 +41,36 @@ a{
   
     
 }
+
+
+/* Nav bar styling */
+
+.sidenav{
+  background-color: #1f1d1d;
+  padding-top: 150px;
+}
+
+.logout{
+  
+  margin-right: 20px !important;
+}
+
+.sidenav li > a{
+  font-size: 30px !important;
+}
+.sidenav li > button{
+  margin-left: 36px !important;
+  
+}
+
+.sidenav li > a:hover{
+  text-align: center !important;
+}
+
+/* Nav styling end */
+
+
+
 .email{
   background-image: url('image.jpg');
   background-size: cover;
@@ -168,9 +198,14 @@ a{
   z-index: -9;
 }
 
+/* toast position */
 #toast-container{
-  
+  top: 50px !important;
+  right: 20px !important;
+  left: auto !important;
 }
+
+/*  */
 
 
 
@@ -490,9 +525,23 @@ a{
   }
 }
 
-@media only screen and (max-width:779px){
+
+
+@media only screen and (max-width:1496px){
   .checkerboard {
     background-image: url('123.jpg');
+  }
+}
+
+@media only screen and (max-width:800px){
+  .checkerboard {
+    background-image: url('small.jpg');
+  }
+}
+
+@media only screen and (max-width:470px){
+  .checkerboard {
+    background-image: url('ex_small.jpg');
   }
 }
 /*# sourceMappingURL=home.css.map */
