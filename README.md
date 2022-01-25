@@ -76,7 +76,7 @@ There is a Heroku postbuild script, so if you push to Heroku, no need to build m
 Before running the following commands, go to [Heroku](https://dashboard.heroku.com/) and signup if you don't have an account.
 
 
-Login to your account and create a new app with name : <your-heroku-project-name>
+Login to your account and create a new app with name  "your-heroku-project-name"
 
 Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) if already not installed
 ```terminal
