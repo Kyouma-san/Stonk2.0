@@ -103,12 +103,29 @@ Remember to add the production env variable in Heroku.
 
 # Screenshots of this project
 
-User visit public and Home page
-![User visit public and Home page](http://i.imgur.com/ORCGHHY.png)
+User visit Login, Signup and Home page
 
-User can sign in or sign up
-![User can sign in or sign up](http://i.imgur.com/rrmbU5I.png)
+![Alt text](signin.png?raw=true "Title")
 
-After signing in user can go to account route and make request to token-protected API endpoint
-![After signing in user can go to account route](http://i.imgur.com/FzLB51u.png)
+![Alt text](signup.png?raw=true "Title")
+
+
+
+After signing in user can access profile, protfolio and transaction routes.
+
+Profile Route shows the investment overview =>total no. of stocks, invested amount, current ammount and Profit/Loss
+![Alt text](profile.png?raw=true "Title")
+
+
+
+Portfolio Route shows the stocks that user have in his/her portfolio. User can remove any stock from portfolio.
+![Alt text](portfolio.png?raw=true "Title")
+
+
+
+Transaction Route shows option to BUY/SELL stocks and also displays last 5 user transactions.
+
+![Alt text](transaction.png?raw=true "Title")
+![Alt text](last_5_transactions.png?raw=true "Title")
+
 
