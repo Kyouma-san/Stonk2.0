@@ -41,7 +41,7 @@ const NavBar = () => {
                 </ul>
 
             </div>
-            <ul className="sidenav" id="mobile-links">
+            <ul className="sidenav right" id="mobile-links">
                 {renderList()}
             </ul>
         </nav>

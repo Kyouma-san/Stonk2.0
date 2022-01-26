@@ -13,6 +13,9 @@ a,h2{
 a{
   font-family: 'Hammersmith One', sans-serif;
 }
+h5{
+  font-family: 'Bebas Neue', cursive;
+}
 
 /* signin/signup css start */
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */

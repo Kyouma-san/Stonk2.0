@@ -142,7 +142,7 @@ const Transaction = () => {
                     />
                     <input
                         type="text"
-                        placeholder="price"
+                        placeholder="price ($)"
                         value={buy_price}
                         className="white-text"
                         onChange={(e) => setBUYPrice(e.target.value)}
@@ -170,7 +170,7 @@ const Transaction = () => {
                     />
                     <input
                         type="text"
-                        placeholder="price"
+                        placeholder="price ($)"
                         value={sell_price}
                         className="white-text"
                         onChange={(e) => setSELLPrice(e.target.value)}

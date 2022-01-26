@@ -56,7 +56,7 @@ const Portfolio = () => {
 
     const [data, setData] = useState([])
     useEffect(() => {
-        fetch('/allUserStocks', {
+        fetch('http://localhost:5000/allUserStocks', {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("jwt")
             }
@@ -86,8 +86,8 @@ const Portfolio = () => {
 
                         <h5>TICKER : {item.ticker} </h5>
                         <h5>UNITS : {item.units} </h5>
-                        <h5>AVG PRICE : {item.price} </h5>
-                        <h5>MKT PRICE : {item.marketPrice} </h5>
+                        <h5>AVG PRICE ($): {item.price} </h5>
+                        <h5>MKT PRICE ($): {item.marketPrice} </h5>
                         <button className="btn auth-btn waves-effect waves-light #e57373 red lighten-2"
                             onClick={() => sellStockV2(item.ticker,item.units,item.price)} >
                                  
